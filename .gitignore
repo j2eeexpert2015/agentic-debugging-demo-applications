@@ -1,0 +1,9 @@
+/.settings
+/java-debugging-demo/.settings
+.project
+/java-debugging-demo/target
+spring-boot-debugging-demo/.classpath
+/spring-boot-debugging-demo/.settings
+/spring-boot-debugging-demo/debug-reports
+/spring-boot-debugging-demo/target
+java-debugging-demo/.classpath

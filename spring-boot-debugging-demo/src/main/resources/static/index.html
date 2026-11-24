@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentic Debugging | Order Demo</title>
+<style>
+:root{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#17233a}
+body{max-width:960px;margin:42px auto;padding:0 20px}h1{font-size:1.9rem;margin-bottom:.3em}
+.lead{color:#5b6678;margin-bottom:28px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:white;border:1px solid #dfe4ee;border-radius:12px;padding:24px;box-shadow:0 2px 8px #00000006}
+.card h2{margin-top:0;font-size:1.25rem}label{display:block;font-size:.85rem;color:#566277;margin-top:12px}
+input{width:100%;padding:10px 12px;border:1px solid #bcc8d9;border-radius:7px;box-sizing:border-box;font-size:1rem}
+button{margin-top:18px;padding:11px 18px;background:#235ad1;color:white;border:0;border-radius:8px;font-weight:600;cursor:pointer}
+.result{margin-top:20px;background:#f3f6ff;border:1px solid #d7e0ff;border-radius:8px;padding:16px;min-height:80px}
+.value{font-size:1.55rem;font-weight:800;margin:8px 0;color:#bc2d38}small{color:#5f6b7c}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-top:24px;color:#6b7686;font-size:.85rem}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>Order Management — Debugging Demo</h1>
+<p class="lead">Reproduce an order-calculation problem, then investigate its actual execution in Eclipse.</p>
+<div class="grid">
+<section class="card">
+<h2>S2 · Shipping eligibility</h2>
+<p>Free shipping applies when the <strong>merchandise subtotal is at least ₹500</strong>, before discounts.</p>
+<label>Quantity<input id="sq" type="number" value="2" min="1"></label>
+<label>Unit price (₹)<input id="sp" type="number" value="300" min="0"></label>
+<label>Discount (%)<input id="sd" type="number" value="20" min="0" max="100"></label>
+<button onclick="quote('shipping')">Calculate shipping quote</button>
+<div class="result" id="shippingResult"><small>Expected: ₹0 shipping for the default order.</small></div>
+</section>
+<section class="card">
+<h2>S1 · Discount calculation</h2>
+<p>Calculate a 10% discount on an order containing two items at ₹60 each.</p>
+<label>Quantity<input id="dq" type="number" value="2" min="1"></label>
+<label>Unit price (₹)<input id="dp" type="number" value="60" min="0"></label>
+<label>Discount (%)<input id="dd" type="number" value="10" min="0" max="100"></label>
+<button onclick="quote('discount')">Calculate discount quote</button>
+<div class="result" id="discountResult"><small>Expected: ₹108 final amount for the default order.</small></div>
+</section>
+<section class="card">
+<h2>S3 · Valid SKU rejected</h2>
+<p>A valid <strong>SKU-208</strong> is unexpectedly rejected with HTTP 400.</p>
+<label>Product SKU<input id="sku" value="SKU-208"></label>
+<label>Quantity<input id="fq" type="number" value="1" min="1"></label>
+<button onclick="validateSku()">Validate fulfillment request</button>
+<div class="result" id="fulfillmentResult"><small>Expected: accepted for SKU-208.</small></div>
+</section>
+</div>
+<footer>Local deterministic demo · no accounts, database, network dependencies or persistence.</footer>
+<script>
+async function quote(kind){
+ const id=kind==='shipping'?'s':'d';const out=document.getElementById(kind+'Result');
+ const request={quantity:Number(document.getElementById(id+'q').value),unitPrice:Number(document.getElementById(id+'p').value),discountPercent:Number(document.getElementById(id+'d').value)};
+ out.textContent='Waiting for the application… (If Eclipse is suspended at a breakpoint, resume execution.)';
+ try{
+  const res=await fetch('/api/orders/'+kind+'-quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request)});
+  const body=await res.text();if(!res.ok)throw new Error('HTTP '+res.status+' '+body);
+  const data=JSON.parse(body);out.innerHTML='';
+  const primary=document.createElement('div');primary.className='value';primary.textContent=kind==='shipping'?'Shipping: ₹'+data.shippingCharge:'Final amount: ₹'+data.finalTotal;out.appendChild(primary);
+  const details=document.createElement('pre');details.textContent=JSON.stringify(data,null,2);out.appendChild(details);
+ }catch(error){out.textContent='Request failed: '+error.message}
+}
+async function validateSku(){
+ const out=document.getElementById('fulfillmentResult');
+ out.textContent='Waiting for the application… (If Eclipse is suspended, resume execution.)';
+ try{
+  const res=await fetch('/api/fulfillment/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sku:document.getElementById('sku').value,quantity:Number(document.getElementById('fq').value)})});
+  const text=await res.text();out.textContent='HTTP '+res.status+' · '+text;
+ }catch(error){out.textContent='Request failed: '+error.message}
+}
+</script>
+</body>
+</html>
