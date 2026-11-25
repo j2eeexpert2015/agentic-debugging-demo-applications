@@ -13,5 +13,6 @@
     <modules>
         <module>java-debugging-demo</module>
         <module>spring-boot-debugging-demo</module>
+        <module>order-management-service</module>
     </modules>
 </project>

@@ -30,7 +30,7 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 **Testing prompt:**
 
-> An order with an original subtotal of ₹600 is charged ₹50 shipping, even though orders of at least ₹500 qualify for free shipping. Use the IDE debugger to reproduce the problem and follow the calculation across relevant application code, inspecting real runtime values. Explain the cause without modifying the code.
+> An order qualifies for free shipping, but the application charges a shipping fee. Start a debug session, investigate the problem using the IDE debugger, and identify the root cause. Do not modify the code.
 
 **Expected symptom:** ₹50 shipping is charged despite the original ₹600 subtotal. This is the preferred scenario for demonstrating observations in more than one application class.
 

@@ -1,41 +1,18 @@
-# Agentic Debugging Demo Applications
+# Agentic Debugging Demo Applications — complete bundle
 
-Reusable, **IDE-neutral** agentic Java debugging exercises for Eclipse, IntelliJ IDEA, and Visual Studio Code. Both projects are independent Maven projects; they are designed for AI agents that actively control an IDE debugger through a compatible MCP integration. They can also be debugged manually for comparison.
+**Single download, run one scenario at a time.** The root Maven reactor contains three independent applications: `java-debugging-demo` (J1,J2,J3), `spring-boot-debugging-demo` (S1,S2,S3,S5), and `order-management-service` (O1–O4). Existing baseline defects were preserved. **Petclinic is separate and is not included.**
 
-> **Intentional bugs:** These applications are deliberately incorrect. Do not fix them before recording or running an investigation. The README prompts reveal only the symptoms, not the answers.
+1. Install JDK 21+ and Maven. From the extracted repository root run `mvn clean install` (Maven must resolve Spring Boot dependencies; first run needs access to your Maven repository/internet).
+2. Import the desired module into Eclipse, IntelliJ IDEA or VS Code. Java scenarios use a `main` class, S scenarios run at http://localhost:8085/, O scenarios at http://localhost:8086/.
+3. Open **[SCENARIOS.md](SCENARIOS.md)**. Select the next scenario, follow its minimal reproduction step, and copy its short human-like prompt.
+4. The agent must actually use the IDE debugger, observe runtime evidence, and avoid modifying code. For O-series click **Reset Demo Data** before each scenario.
+5. Track results in **[docs/VALIDATION_TRACKER.md](docs/VALIDATION_TRACKER.md)**. New O-series scenarios are implemented as demonstration defects but **have not yet passed live MCP trials**.
 
-## Folder structure
+> The original README material follows for existing baseline scenarios. It is retained for continuity. Use SCENARIOS.md as the canonical prompt catalog; S2 retains the exact previously approved wording.
 
-```text
-agentic-debugging-demo-applications/
-├── pom.xml                         # Root Maven reactor aggregator
-├── README.md                       # Scenario prompts and instructions
-├── java-debugging-demo/            # Core Java: J1 and J2
-│   ├── pom.xml
-│   ├── README.md
-│   └── src/main/java/...
-└── spring-boot-debugging-demo/     # Spring Boot: S1, S2, S3 and S5
-    ├── pom.xml
-    ├── README.md
-    └── src/main/, src/test/...
-```
+---
 
-## Requirements
-
-- JDK **21 or newer**, configured as the project JDK.
-- Maven 3.9+ recommended (or your IDE's Maven integration). The root `pom.xml` is a **reactor aggregator**, allowing both independent applications to be built together; each application also retains its own `pom.xml`.
-- An IDE debugger (Eclipse, IntelliJ IDEA, or VS Code with Java debugging support). Agentic trials require an installed, compatible debugging MCP implementation and a connected agent; these samples do **not** bundle one.
-- Spring Boot demo additionally requires Maven dependency resolution; the first build may download dependencies. Default server port: **8085**.
-
-## Importing into your IDE
-
-| IDE | How to open the projects |
-| --- | --- |
-| Eclipse | **File → Import → Maven → Existing Maven Projects**; select each project directory; ensure JDK 21+ |
-| IntelliJ IDEA | **File → Open** on each project directory or `pom.xml`; import as Maven project; select JDK 21+ |
-| VS Code | Open each project folder (or this parent folder) with **Extension Pack for Java** / appropriate Java extensions; let Maven import finish |
-
-The projects can live outside the debugger's source repository. If copying them into a debugger repository, keep them separate from its existing fixtures; do not overwrite the existing `examples/` directory.
+## Existing baseline: detailed testing instructions
 
 ## Testing procedure (all IDEs)
 
@@ -47,7 +24,7 @@ The projects can live outside the debugger's source repository. If copying them 
 
 **Do not share answers or expected root causes with the debugging agent.** The prompts below are suitable to copy directly.
 
-## Core Java — testing prompts
+## Core Java — original baseline prompts
 
 ### J1 — Wrong discount for one customer in a 1,000-order batch
 
@@ -69,7 +46,7 @@ The projects can live outside the debugger's source repository. If copying them 
 
 **Symptom to observe:** 12 input records and 11 imported records.
 
-## Spring Boot — testing prompts
+## Spring Boot — original baseline prompts
 
 **Application main class:** `org.learningfromexperience.demo.boot.OrderDemoApplication`
 
@@ -89,7 +66,7 @@ The projects can live outside the debugger's source repository. If copying them 
 
 **Testing prompt:**
 
-> An order with an original subtotal of ₹600 is charged ₹50 shipping, even though orders of at least ₹500 qualify for free shipping. Use the IDE debugger to reproduce the problem and follow the calculation across relevant application code, inspecting real runtime values. Explain the cause without modifying the code.
+> An order qualifies for free shipping, but the application charges a shipping fee. Start a debug session, investigate the problem using the IDE debugger, and identify the root cause. Do not modify the code.
 
 ### S3 — Valid SKU rejected with HTTP 400
 
@@ -122,7 +99,7 @@ The projects can live outside the debugger's source repository. If copying them 
 
 ## Build / run
 
-### Build both applications together (recommended)
+### Build all modules together (recommended)
 
 Open a terminal in **`agentic-debugging-demo-applications/`**, the directory containing this root `pom.xml`:
 
@@ -130,7 +107,7 @@ Open a terminal in **`agentic-debugging-demo-applications/`**, the directory con
 mvn clean install
 ```
 
-This runs the Maven reactor for the aggregator and both modules. The Maven parent relationships within the two demo POMs are unchanged. The applications remain independent Maven projects and may also be imported separately into an IDE.
+This runs the Maven reactor for the aggregator and all three modules. The Maven parent relationships within the two demo POMs are unchanged. The applications remain independent Maven projects and may also be imported separately into an IDE.
 
 ### Build one application only
 
@@ -150,7 +127,7 @@ The Spring-context JUnit scenario **S5** is intentionally faulty. Its class `Ord
 **Do not fix the intentional defects** to make debugging demonstrations pass; a successful Maven build and a successful agentic debugging investigation measure different things.
 
 
-For the Spring Boot project, to start the web application without the IDE:
+For the baseline Spring Boot module, to start the web application without the IDE (run from its directory):
 
 ```bash
 mvn spring-boot:run

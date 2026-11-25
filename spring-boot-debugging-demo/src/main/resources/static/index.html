@@ -19,7 +19,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-to
 </head>
 <body>
 <h1>Order Management — Debugging Demo</h1>
-<p class="lead">Reproduce an order-calculation problem, then investigate its actual execution in Eclipse.</p>
+<p class="lead">Reproduce an order-calculation problem, then investigate its actual execution using your IDE debugger.</p>
 <div class="grid">
 <section class="card">
 <h2>S2 · Shipping eligibility</h2>
@@ -53,7 +53,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-to
 async function quote(kind){
  const id=kind==='shipping'?'s':'d';const out=document.getElementById(kind+'Result');
  const request={quantity:Number(document.getElementById(id+'q').value),unitPrice:Number(document.getElementById(id+'p').value),discountPercent:Number(document.getElementById(id+'d').value)};
- out.textContent='Waiting for the application… (If Eclipse is suspended at a breakpoint, resume execution.)';
+ out.textContent='Waiting for the application… (If the debugger is suspended at a breakpoint, resume execution.)';
  try{
   const res=await fetch('/api/orders/'+kind+'-quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request)});
   const body=await res.text();if(!res.ok)throw new Error('HTTP '+res.status+' '+body);
@@ -64,7 +64,7 @@ async function quote(kind){
 }
 async function validateSku(){
  const out=document.getElementById('fulfillmentResult');
- out.textContent='Waiting for the application… (If Eclipse is suspended, resume execution.)';
+ out.textContent='Waiting for the application… (If the debugger is suspended, resume execution.)';
  try{
   const res=await fetch('/api/fulfillment/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sku:document.getElementById('sku').value,quantity:Number(document.getElementById('fq').value)})});
   const text=await res.text();out.textContent='HTTP '+res.status+' · '+text;

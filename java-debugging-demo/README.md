@@ -45,3 +45,12 @@ Run the indicated `main` class normally to reproduce its symptom; stop it before
 - [ ] Agent-owned resources cleaned up and available report reviewed
 
 No source changes or external services are required for these scenarios.
+
+
+## J3 — Unexpected state change (new)
+
+Run `org.learningfromexperience.demo.java.state.OrderStateDemo.main`.
+
+> An order starts with the correct amount, but the amount changes unexpectedly while processing other orders. Debug the application and find out what's changing it. Don't modify the code.
+
+See [`../SCENARIOS.md`](../SCENARIOS.md).
