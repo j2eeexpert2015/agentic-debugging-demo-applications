@@ -10,10 +10,10 @@ Run **Reset Demo Data** before each attempt. It deletes all demo orders and inve
 
 | ID | Symptom | UI | Status |
 |---|---|---|---|
-| O1 | PUT reports new delivery note, later GET returns old note | O1 card | Implemented, requires end-to-end debugger validation |
-| O2 | Quantity increase of one removes too much inventory | O2 card | Implemented, requires end-to-end debugger validation |
-| O3 | Order confirmation fails and DB state is unchanged | O3 card | Implemented, requires end-to-end debugger validation |
-| O4 | A simulated retry of a logical checkout creates two orders | O4 card | Implemented, requires end-to-end debugger validation |
+| Order Update Not Persisted | PUT reports new delivery note, later GET returns old note | Order Update Not Persisted card | Implemented, requires end-to-end debugger validation |
+| Incorrect Inventory Adjustment | Quantity increase of one removes too much inventory | Incorrect Inventory Adjustment card | Implemented, requires end-to-end debugger validation |
+| Order Confirmation Rollback | Order confirmation fails and DB state is unchanged | Order Confirmation Rollback card | Implemented, requires end-to-end debugger validation |
+| Duplicate Checkout After Retry | A simulated retry of a logical checkout creates two orders | Duplicate Checkout After Retry card | Implemented, requires end-to-end debugger validation |
 
 ## Endpoints
 
@@ -26,6 +26,6 @@ Run **Reset Demo Data** before each attempt. It deletes all demo orders and inve
 - `POST /api/checkout` JSON `{"customerId":"CUST-RETRY","requestKey":"checkout-once-001"}`
 - `GET /api/customers/CUST-RETRY/orders`
 
-O4 deliberately models transport retry with two HTTP deliveries sharing a logical request key. A genuine one-request/one-response test will **not** demonstrate it. This distinction is important for a fair debugging demonstration.
+Duplicate Checkout After Retry deliberately models transport retry with two HTTP deliveries sharing a logical request key. A genuine one-request/one-response test will **not** demonstrate it. This distinction is important for a fair debugging demonstration.
 
 There are no external infrastructure dependencies. H2 runs in-memory; startup and `POST /api/demo/reset` recreate deterministic data. **Do not modify the app during debugging experiments.**

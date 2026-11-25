@@ -22,7 +22,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-to
 <p class="lead">Reproduce an order-calculation problem, then investigate its actual execution using your IDE debugger.</p>
 <div class="grid">
 <section class="card">
-<h2>S2 · Shipping eligibility</h2>
+<h2>Incorrect Shipping Charge</h2>
 <p>Free shipping applies when the <strong>merchandise subtotal is at least ₹500</strong>, before discounts.</p>
 <label>Quantity<input id="sq" type="number" value="2" min="1"></label>
 <label>Unit price (₹)<input id="sp" type="number" value="300" min="0"></label>
@@ -31,7 +31,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-to
 <div class="result" id="shippingResult"><small>Expected: ₹0 shipping for the default order.</small></div>
 </section>
 <section class="card">
-<h2>S1 · Discount calculation</h2>
+<h2>Incorrect Discounted Order Total</h2>
 <p>Calculate a 10% discount on an order containing two items at ₹60 each.</p>
 <label>Quantity<input id="dq" type="number" value="2" min="1"></label>
 <label>Unit price (₹)<input id="dp" type="number" value="60" min="0"></label>
@@ -40,7 +40,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.83rem}footer{margin-to
 <div class="result" id="discountResult"><small>Expected: ₹108 final amount for the default order.</small></div>
 </section>
 <section class="card">
-<h2>S3 · Valid SKU rejected</h2>
+<h2>Valid SKU Rejected</h2>
 <p>A valid <strong>SKU-208</strong> is unexpectedly rejected with HTTP 400.</p>
 <label>Product SKU<input id="sku" value="SKU-208"></label>
 <label>Quantity<input id="fq" type="number" value="1" min="1"></label>

@@ -2,7 +2,7 @@
 
 Two independent, intentionally faulty, dependency-free Core Java programs. Use with **Eclipse, IntelliJ IDEA, or VS Code** (JDK 21+). Import this folder as a Maven project. Both scenarios are also listed in the [parent README](../README.md).
 
-> **Build from the parent folder:** `mvn clean install` builds both demo applications using the root aggregator `pom.xml`. This project can still be built independently using `mvn clean install` from its own folder.
+> **Build from the parent folder:** `mvn clean install` builds all demo applications using the root aggregator `pom.xml`. This project can still be built independently using `mvn clean install` from its own folder.
 
 ## Setup
 
@@ -12,7 +12,7 @@ mvn clean package
 
 Run the indicated `main` class normally to reproduce its symptom; stop it before starting a separate debugger launch. For agentic trials connect your selected IDE's debugger MCP, paste the testing prompt **without disclosing the defect**, and let the agent decide where to break and inspect.
 
-## J1 — Incorrect discount for one customer among 1,000 orders
+## Batch Discount Mismatch
 
 **Main class:** `org.learningfromexperience.demo.java.batch.BatchDiscountDemo`
 
@@ -24,7 +24,7 @@ Run the indicated `main` class normally to reproduce its symptom; stop it before
 
 **What to validate:** A meaningful conditional/targeted breakpoint or equivalent selective debugging strategy; the affected order and actual runtime values; an evidence-based explanation without repeated stops for unrelated records.
 
-## J2 — Transaction silently missing
+## Silent Transaction Import Failure
 
 **Main class:** `org.learningfromexperience.demo.java.imports.TransactionImportDemo`
 
@@ -47,7 +47,7 @@ Run the indicated `main` class normally to reproduce its symptom; stop it before
 No source changes or external services are required for these scenarios.
 
 
-## J3 — Unexpected state change (new)
+## Unexpected Order State Mutation
 
 Run `org.learningfromexperience.demo.java.state.OrderStateDemo.main`.
 

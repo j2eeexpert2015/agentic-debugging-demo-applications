@@ -4,7 +4,7 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 **Requirements:** JDK 21+, Maven / IDE Maven integration, Spring Boot **3.5.16** (dependencies downloaded on first build).
 
-> **Build from the parent folder:** `mvn clean install` builds both demo applications using the root aggregator `pom.xml`. This project can still be built independently using `mvn clean install` from its own folder.
+> **Build from the parent folder:** `mvn clean install` builds all demo applications using the root aggregator `pom.xml`. This project can still be built independently using `mvn clean install` from its own folder.
 
 ## Launch and reproduce
 
@@ -14,9 +14,9 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 - Open the browser page and choose the named scenario card. **After the agent sets breakpoints**, click that card's submit button again to trigger the relevant HTTP request. The browser will wait while a breakpoint suspends the request thread. Resume execution to allow the response to complete.
 - Do not leave a normal server instance using port 8085 running when launching another debug instance.
 
-## S1 — Order total does not include discount
+## Incorrect Discounted Order Total
 
-**Browser card:** **Discount calculation** (quantity 2, unit price ₹60, discount 10%).
+**Browser card:** **Incorrect Discounted Order Total** (quantity 2, unit price ₹60, discount 10%).
 
 **Testing prompt:**
 
@@ -24,9 +24,9 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 **Expected symptom:** The response contains ₹120 instead of ₹108. Investigate via actual suspended frames and values, not source reading alone.
 
-## S2 — Incorrect shipping charge
+## Incorrect Shipping Charge
 
-**Browser card:** **Shipping eligibility** (quantity 2, unit price ₹300, discount 20%).
+**Browser card:** **Incorrect Shipping Charge** (quantity 2, unit price ₹300, discount 20%).
 
 **Testing prompt:**
 
@@ -34,9 +34,9 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 **Expected symptom:** ₹50 shipping is charged despite the original ₹600 subtotal. This is the preferred scenario for demonstrating observations in more than one application class.
 
-## S3 — Valid SKU rejected with HTTP 400
+## Valid SKU Rejected
 
-**Browser card:** **Valid SKU rejected** (SKU `SKU-208`, quantity 1).
+**Browser card:** **Valid SKU Rejected** (SKU `SKU-208`, quantity 1).
 
 **Testing prompt:**
 
@@ -44,7 +44,7 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 **Expected symptom:** HTTP 400 in response to the default request. Capture actual validation state and any relevant exception.
 
-## S5 — Failing Spring-context JUnit test
+## Loyalty Points Test Failure
 
 **Target method:** `org.learningfromexperience.demo.boot.OrderApiIntegrationScenario.awardsProportionalLoyaltyPoints`
 
@@ -58,10 +58,10 @@ An intentionally faulty Spring Boot application with independent debugging exerc
 
 | Scenario | API | Trigger |
 | --- | --- | --- |
-| S1 | `POST /api/orders/discount-quote` | Discount calculation card |
-| S2 | `POST /api/orders/shipping-quote` | Shipping eligibility card |
-| S3 | `POST /api/fulfillment/validate` | Valid SKU rejected card |
-| S5 | Spring-context JUnit | Targeted test-method debug launch |
+| Incorrect Discounted Order Total | `POST /api/orders/discount-quote` | Discount calculation card |
+| Incorrect Shipping Charge | `POST /api/orders/shipping-quote` | Shipping eligibility card |
+| Valid SKU Rejected | `POST /api/fulfillment/validate` | Valid SKU rejected card |
+| Loyalty Points Test Failure | Spring-context JUnit | Targeted test-method debug launch |
 
 ## Debugging trial acceptance
 

@@ -1,18 +1,18 @@
 # Agentic Debugging Demo Applications — complete bundle
 
-**Single download, run one scenario at a time.** The root Maven reactor contains three independent applications: `java-debugging-demo` (J1,J2,J3), `spring-boot-debugging-demo` (S1,S2,S3,S5), and `order-management-service` (O1–O4). Existing baseline defects were preserved. **Petclinic is separate and is not included.**
+**Single download, run one scenario at a time.** The root Maven reactor contains three independent applications: `java-debugging-demo` (Core Java), `spring-boot-debugging-demo` (Spring Boot basics), and `order-management-service` (realistic REST/JPA scenarios). The existing intentional defects are preserved. **Petclinic is a separate application and is not included.**
 
 1. Install JDK 21+ and Maven. From the extracted repository root run `mvn clean install` (Maven must resolve Spring Boot dependencies; first run needs access to your Maven repository/internet).
-2. Import the desired module into Eclipse, IntelliJ IDEA or VS Code. Java scenarios use a `main` class, S scenarios run at http://localhost:8085/, O scenarios at http://localhost:8086/.
+2. Import the desired module into Eclipse, IntelliJ IDEA or VS Code. Java scenarios use a `main` class, Spring Boot scenarios run at http://localhost:8085/, Order Management scenarios at http://localhost:8086/.
 3. Open **[SCENARIOS.md](SCENARIOS.md)**. Select the next scenario, follow its minimal reproduction step, and copy its short human-like prompt.
-4. The agent must actually use the IDE debugger, observe runtime evidence, and avoid modifying code. For O-series click **Reset Demo Data** before each scenario.
-5. Track results in **[docs/VALIDATION_TRACKER.md](docs/VALIDATION_TRACKER.md)**. New O-series scenarios are implemented as demonstration defects but **have not yet passed live MCP trials**.
+4. The agent must actually use the IDE debugger, observe runtime evidence, and avoid modifying code. For Order Management click **Reset Demo Data** before each scenario.
+5. Track results in **[docs/VALIDATION_TRACKER.md](docs/VALIDATION_TRACKER.md)**. New Order Management scenarios are implemented as demonstration defects but **have not yet passed live MCP trials**.
 
-> The original README material follows for existing baseline scenarios. It is retained for continuity. Use SCENARIOS.md as the canonical prompt catalog; S2 retains the exact previously approved wording.
+> The original README material follows for existing baseline scenarios. It is retained for continuity. Use SCENARIOS.md as the canonical prompt catalog; Incorrect Shipping Charge retains the exact previously approved wording.
 
 ---
 
-## Existing baseline: detailed testing instructions
+## Foundation Scenarios: Detailed Testing Instructions
 
 ## Testing procedure (all IDEs)
 
@@ -24,9 +24,9 @@
 
 **Do not share answers or expected root causes with the debugging agent.** The prompts below are suitable to copy directly.
 
-## Core Java — original baseline prompts
+## Core Java — Foundation Scenarios
 
-### J1 — Wrong discount for one customer in a 1,000-order batch
+### Batch Discount Mismatch
 
 **Entry point:** `org.learningfromexperience.demo.java.batch.BatchDiscountDemo`
 
@@ -36,7 +36,7 @@
 
 **Symptom to observe:** one discount mismatch involving `CUST-0427` in the console output.
 
-### J2 — Silent transaction import loss
+### Silent Transaction Import Failure
 
 **Entry point:** `org.learningfromexperience.demo.java.imports.TransactionImportDemo`
 
@@ -46,13 +46,13 @@
 
 **Symptom to observe:** 12 input records and 11 imported records.
 
-## Spring Boot — original baseline prompts
+## Spring Boot — Foundation Scenarios
 
 **Application main class:** `org.learningfromexperience.demo.boot.OrderDemoApplication`
 
 **Browser trigger:** Start the application on port 8085, open **http://localhost:8085/** and use the named scenario card. A browser request paused at a debugger breakpoint will not complete until the JVM is resumed.
 
-### S1 — Incorrect discounted order total
+### Incorrect Discounted Order Total
 
 **Browser card:** Discount calculation (defaults: quantity 2, unit price ₹60, discount 10%).
 
@@ -60,7 +60,7 @@
 
 > The orders API returns ₹120 instead of ₹108 for quantity 2, unit price ₹60, and a 10% discount. Use the IDE debugger to reproduce the response, follow the relevant execution, inspect actual calculation values, and explain the cause. Do not modify the application code.
 
-### S2 — Incorrect shipping charge
+### Incorrect Shipping Charge
 
 **Browser card:** Shipping eligibility (defaults: quantity 2, unit price ₹300, discount 20%).
 
@@ -68,7 +68,7 @@
 
 > An order qualifies for free shipping, but the application charges a shipping fee. Start a debug session, investigate the problem using the IDE debugger, and identify the root cause. Do not modify the code.
 
-### S3 — Valid SKU rejected with HTTP 400
+### Valid SKU Rejected
 
 **Browser card:** Valid SKU rejected (default SKU `SKU-208`, quantity 1).
 
@@ -76,7 +76,7 @@
 
 > The fulfillment API rejects the apparently valid SKU-208 with HTTP 400. Debug the request, locate where the SKU is rejected, inspect the values at the relevant execution points, and explain why the rejection happens. Do not modify the application code.
 
-### S5 — Spring-context JUnit test failure
+### Loyalty Points Test Failure
 
 **Test method:** `org.learningfromexperience.demo.boot.OrderApiIntegrationScenario.awardsProportionalLoyaltyPoints`
 
@@ -84,18 +84,18 @@
 
 > The Spring-context JUnit test OrderApiIntegrationScenario.awardsProportionalLoyaltyPoints fails for an order amount of ₹250. Launch this specific test method in debug mode, inspect the actual runtime values and failing assertion, and explain the cause using debugger evidence. Do not modify the application code.
 
-**Important:** S5 is an intentionally failing **JUnit method**. Debug it individually using the IDE; it is not a browser scenario. Its class is named to avoid automatic Maven Surefire test discovery. Running all JUnit tests through the IDE may still execute it.
+**Important:** Loyalty Points Test Failure is an intentionally failing **JUnit method**. Debug it individually using the IDE; it is not a browser scenario. Its class is named to avoid automatic Maven Surefire test discovery. Running all JUnit tests through the IDE may still execute it.
 
 ## Scenario overview
 
 | ID | Project | Entry point / trigger | Expected symptom |
 | --- | --- | --- | --- |
-| J1 | Core Java | `BatchDiscountDemo.main` | One of 1,000 orders has a discount mismatch |
-| J2 | Core Java | `TransactionImportDemo.main` | 11 of 12 transactions imported without an error |
-| S1 | Spring Boot | `POST /api/orders/discount-quote` | ₹120 returned instead of ₹108 |
-| S2 | Spring Boot | `POST /api/orders/shipping-quote` | ₹50 shipping for original subtotal ₹600 |
-| S3 | Spring Boot | `POST /api/fulfillment/validate` | HTTP 400 for `SKU-208` |
-| S5 | Spring Boot | Specific JUnit method | Intentionally failing assertion |
+| Batch Discount Mismatch | Core Java | `BatchDiscountDemo.main` | One of 1,000 orders has a discount mismatch |
+| Silent Transaction Import Failure | Core Java | `TransactionImportDemo.main` | 11 of 12 transactions imported without an error |
+| Incorrect Discounted Order Total | Spring Boot | `POST /api/orders/discount-quote` | ₹120 returned instead of ₹108 |
+| Incorrect Shipping Charge | Spring Boot | `POST /api/orders/shipping-quote` | ₹50 shipping for original subtotal ₹600 |
+| Valid SKU Rejected | Spring Boot | `POST /api/fulfillment/validate` | HTTP 400 for `SKU-208` |
+| Loyalty Points Test Failure | Spring Boot | Specific JUnit method | Intentionally failing assertion |
 
 ## Build / run
 
@@ -120,9 +120,9 @@ mvn -f spring-boot-debugging-demo/pom.xml clean install
 
 Alternatively, change into either application directory and run `mvn clean install` there.
 
-### Intentional S5 test failure
+### Intentional JUnit Failure
 
-The Spring-context JUnit scenario **S5** is intentionally faulty. Its class `OrderApiIntegrationScenario` is not selected by Maven Surefire's default test-name patterns; therefore the normal root `mvn clean install` is intended to complete successfully while preserving the bug. Run this test **explicitly** in your IDE's debugger when investigating S5. If you explicitly run the test through Maven, its failure is intentional and the build will fail.
+The Spring-context JUnit scenario **Loyalty Points Test Failure** is intentionally faulty. Its class `OrderApiIntegrationScenario` is not selected by Maven Surefire's default test-name patterns; therefore the normal root `mvn clean install` is intended to complete successfully while preserving the bug. Run this test **explicitly** in your IDE's debugger when investigating Loyalty Points Test Failure. If you explicitly run the test through Maven, its failure is intentional and the build will fail.
 
 **Do not fix the intentional defects** to make debugging demonstrations pass; a successful Maven build and a successful agentic debugging investigation measure different things.
 
@@ -133,7 +133,7 @@ For the baseline Spring Boot module, to start the web application without the ID
 mvn spring-boot:run
 ```
 
-`mvn clean package` is a build check, **not** a demonstration that the intentional debugging scenarios are fixed. S5 must be invoked as the selected JUnit method in an IDE for its intentional failure. The regular Maven test lifecycle does not automatically discover its class name.
+`mvn clean package` is a build check, **not** a demonstration that the intentional debugging scenarios are fixed. Loyalty Points Test Failure must be invoked as the selected JUnit method in an IDE for its intentional failure. The regular Maven test lifecycle does not automatically discover its class name.
 
 ## How to judge a debugging trial
 
